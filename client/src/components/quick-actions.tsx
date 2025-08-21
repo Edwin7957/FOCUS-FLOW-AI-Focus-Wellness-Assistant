@@ -1,14 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Pause, Coffee, Square } from "lucide-react";
+import { Pause, Play, Coffee, Square } from "lucide-react";
 
 interface QuickActionsProps {
   onPauseSession: () => void;
   onTakeBreak: () => void;
   onEndSession: () => void;
+  isPaused?: boolean;
 }
 
-export function QuickActions({ onPauseSession, onTakeBreak, onEndSession }: QuickActionsProps) {
+export function QuickActions({ onPauseSession, onTakeBreak, onEndSession, isPaused = false }: QuickActionsProps) {
   return (
     <Card className="bg-white rounded-2xl shadow-sm border border-gray-200">
       <CardHeader className="p-6">
@@ -20,12 +21,14 @@ export function QuickActions({ onPauseSession, onTakeBreak, onEndSession }: Quic
       <CardContent className="p-6 pt-0">
         <div className="space-y-3">
           <Button
-            className="w-full p-3 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200"
+            className={`w-full p-3 border ${isPaused 
+              ? 'bg-green-50 hover:bg-green-100 text-green-700 border-green-200' 
+              : 'bg-red-50 hover:bg-red-100 text-red-700 border-red-200'}`}
             variant="ghost"
             onClick={onPauseSession}
           >
-            <Pause className="w-4 h-4 mr-2" />
-            Pause Session
+            {isPaused ? <Play className="w-4 h-4 mr-2" /> : <Pause className="w-4 h-4 mr-2" />}
+            {isPaused ? 'Resume Session' : 'Pause Session'}
           </Button>
           
           <Button

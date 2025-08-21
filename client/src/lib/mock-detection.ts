@@ -14,8 +14,8 @@ export class MockDetectionService {
     // Generate mock detection result with realistic patterns
     const states: FocusState[] = ["FOCUSED", "DROWSY", "DISTRACTED", "STRESSED"];
     
-    // More realistic weights - people don't stay focused 65% of the time!
-    const baseWeights = [0.40, 0.25, 0.25, 0.10];
+    // More realistic weights - much more varied for testing
+    const baseWeights = [0.30, 0.30, 0.30, 0.10];
     
     // Adjust weights based on session duration (people get more distracted over time)
     const sessionDuration = (Date.now() - this.sessionStartTime.getTime()) / (1000 * 60); // minutes
@@ -43,10 +43,10 @@ export class MockDetectionService {
       }
     }
 
-    // Add temporal consistency - don't change states too frequently
+    // Reduced temporal consistency for more responsive testing
     const timeSinceLastChange = Date.now() - this.lastStateChange.getTime();
-    if (this.lastDetection && timeSinceLastChange < 8000) { // At least 8 seconds between changes
-      if (Math.random() < 0.7) {
+    if (this.lastDetection && timeSinceLastChange < 3000) { // Reduced to 3 seconds
+      if (Math.random() < 0.4) { // Reduced probability to 40%
         selectedState = this.lastDetection.state;
         this.consecutiveStateCount++;
       }

@@ -21,6 +21,7 @@ export default function Dashboard() {
   const [nudgeState, setNudgeState] = useState<FocusState | null>(null);
   const [lastDetection, setLastDetection] = useState<DetectionResult | null>(null);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   const {
     session,
@@ -45,6 +46,8 @@ export default function Dashboard() {
 
   // Handle detection results
   const handleDetection = async (result: DetectionResult) => {
+    if (isPaused) return; // Don't process detection when paused
+    
     setLastDetection(result);
     
     if (result.state !== currentState) {
@@ -79,16 +82,26 @@ export default function Dashboard() {
   };
 
   const handlePauseSession = () => {
+    setIsPaused(!isPaused);
     toast({
-      title: "Session Paused",
-      description: "Click resume when ready to continue.",
+      title: isPaused ? "Session Resumed" : "Session Paused",
+      description: isPaused ? "Detection has resumed." : "Detection is paused. Click again to resume.",
     });
   };
 
   const handleTakeBreak = () => {
+    setIsPaused(true);
+    setTimeout(() => {
+      setIsPaused(false);
+      toast({
+        title: "Break Over!",
+        description: "Detection has resumed. Welcome back!",
+      });
+    }, 5000); // 5 second break
+    
     toast({
       title: "Break Time!",
-      description: "The app will continue monitoring when you return.",
+      description: "Taking a 5-second break. Detection will resume automatically.",
     });
   };
 
@@ -177,6 +190,7 @@ export default function Dashboard() {
               onPauseSession={handlePauseSession}
               onTakeBreak={handleTakeBreak}
               onEndSession={handleEndSession}
+              isPaused={isPaused}
             />
           </div>
         </div>

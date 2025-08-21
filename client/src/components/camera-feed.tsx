@@ -29,7 +29,7 @@ export function CameraFeed({ onDetection }: CameraFeedProps) {
         } catch (error) {
           console.error("Detection error:", error);
         }
-      }, 2000); // Detect every 2 seconds
+      }, 1000); // Detect every 1 second for more responsiveness
     }
 
     return () => {
