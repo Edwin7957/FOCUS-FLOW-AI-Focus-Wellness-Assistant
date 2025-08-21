@@ -39,3 +39,7 @@ A React-based web application that helps students maintain focus during study se
 1. **Clone and install dependencies**
 ```bash
 npm install
+
+
+
+This project was personally developed by Prajwal Dikshit, Vibudhan Dubey and Edwin Vettikattil as part of our MCA learning journey.
