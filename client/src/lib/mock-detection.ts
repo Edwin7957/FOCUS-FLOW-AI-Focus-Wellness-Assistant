@@ -3,30 +3,69 @@ import { DetectionResult, FocusState } from "../types";
 export class MockDetectionService {
   private lastDetection: DetectionResult | null = null;
   private detectionHistory: DetectionResult[] = [];
+  private sessionStartTime: Date = new Date();
+  private consecutiveStateCount: number = 0;
+  private lastStateChange: Date = new Date();
 
   async processFrame(videoElement: HTMLVideoElement): Promise<DetectionResult> {
     // Simulate processing delay
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    // Generate mock detection result
+    // Generate mock detection result with realistic patterns
     const states: FocusState[] = ["FOCUSED", "DROWSY", "DISTRACTED", "STRESSED"];
-    const weights = [0.65, 0.2, 0.12, 0.03]; // Bias towards focused state
+    
+    // More realistic weights - people don't stay focused 65% of the time!
+    const baseWeights = [0.40, 0.25, 0.25, 0.10];
+    
+    // Adjust weights based on session duration (people get more distracted over time)
+    const sessionDuration = (Date.now() - this.sessionStartTime.getTime()) / (1000 * 60); // minutes
+    const fatigueMultiplier = Math.min(1.5, 1 + sessionDuration * 0.02); // Gradually increase distraction
+    
+    const adjustedWeights = [
+      baseWeights[0] / fatigueMultiplier, // Focused decreases over time
+      baseWeights[1] * fatigueMultiplier, // Drowsy increases over time
+      baseWeights[2] * Math.min(1.3, fatigueMultiplier), // Distracted increases
+      baseWeights[3] * Math.min(1.2, fatigueMultiplier)  // Stressed increases slightly
+    ];
+    
+    // Normalize weights
+    const totalWeight = adjustedWeights.reduce((a, b) => a + b, 0);
+    const normalizedWeights = adjustedWeights.map(w => w / totalWeight);
     
     let randomValue = Math.random();
     let selectedState: FocusState = states[0];
     
-    for (let i = 0; i < weights.length; i++) {
-      randomValue -= weights[i];
+    for (let i = 0; i < normalizedWeights.length; i++) {
+      randomValue -= normalizedWeights[i];
       if (randomValue <= 0) {
         selectedState = states[i];
         break;
       }
     }
 
-    // Add some temporal consistency - if last state was not focused, 
-    // have a higher chance of staying in that state for a bit
-    if (this.lastDetection && this.lastDetection.state !== "FOCUSED" && Math.random() < 0.7) {
-      selectedState = this.lastDetection.state;
+    // Add temporal consistency - don't change states too frequently
+    const timeSinceLastChange = Date.now() - this.lastStateChange.getTime();
+    if (this.lastDetection && timeSinceLastChange < 8000) { // At least 8 seconds between changes
+      if (Math.random() < 0.7) {
+        selectedState = this.lastDetection.state;
+        this.consecutiveStateCount++;
+      }
+    }
+
+    // But also prevent staying in non-focused states too long
+    if (this.lastDetection && selectedState === this.lastDetection.state) {
+      this.consecutiveStateCount++;
+      
+      // If distracted/drowsy for too long, occasionally snap back to focused
+      if ((selectedState === "DISTRACTED" || selectedState === "DROWSY") && 
+          this.consecutiveStateCount > 4 && Math.random() < 0.3) {
+        selectedState = "FOCUSED";
+        this.consecutiveStateCount = 0;
+        this.lastStateChange = new Date();
+      }
+    } else {
+      this.consecutiveStateCount = 0;
+      this.lastStateChange = new Date();
     }
 
     const confidence = 0.75 + Math.random() * 0.25; // 75-100% confidence
@@ -67,6 +106,19 @@ export class MockDetectionService {
 
   getCurrentState(): FocusState {
     return this.lastDetection?.state || "FOCUSED";
+  }
+
+  // Method to manually trigger a state for testing
+  triggerState(state: FocusState): void {
+    this.consecutiveStateCount = 0;
+    this.lastStateChange = new Date();
+  }
+
+  // Reset session timer
+  resetSession(): void {
+    this.sessionStartTime = new Date();
+    this.consecutiveStateCount = 0;
+    this.lastStateChange = new Date();
   }
 }
 

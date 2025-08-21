@@ -9,6 +9,7 @@ import { SessionStats } from "@/components/session-stats";
 import { QuickActions } from "@/components/quick-actions";
 import { FocusNudge } from "@/components/focus-nudge";
 import { PrivacyConsent } from "@/components/privacy-consent";
+import { SettingsModal } from "@/components/settings-modal";
 import { useSession } from "@/hooks/use-session";
 import type { DetectionResult, FocusState } from "../types";
 
@@ -19,6 +20,7 @@ export default function Dashboard() {
   const [sessionTimer, setSessionTimer] = useState("00:00:00");
   const [nudgeState, setNudgeState] = useState<FocusState | null>(null);
   const [lastDetection, setLastDetection] = useState<DetectionResult | null>(null);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
 
   const {
     session,
@@ -137,7 +139,7 @@ export default function Dashboard() {
             </div>
             
             {/* Settings */}
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" onClick={() => setShowSettingsModal(true)}>
               <Settings className="w-5 h-5" />
             </Button>
           </div>
@@ -184,6 +186,12 @@ export default function Dashboard() {
       <FocusNudge
         state={nudgeState}
         onDismiss={() => setNudgeState(null)}
+      />
+
+      {/* Settings Modal */}
+      <SettingsModal
+        isOpen={showSettingsModal}
+        onClose={() => setShowSettingsModal(false)}
       />
     </div>
   );
