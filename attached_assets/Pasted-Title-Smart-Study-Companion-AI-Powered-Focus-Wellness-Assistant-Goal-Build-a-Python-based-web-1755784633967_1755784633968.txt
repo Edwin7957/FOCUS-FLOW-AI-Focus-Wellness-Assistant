@@ -1,0 +1,89 @@
+Title: Smart Study Companion – AI-Powered Focus & Wellness Assistant
+
+Goal: Build a Python-based web app that helps students maintain focus during study sessions by analyzing webcam + microphone input and providing gentle nudges.
+
+Core Features:
+
+Webcam Monitoring (with user consent only):
+
+Detect drowsiness (eye closure, yawning) using OpenCV + a lightweight facial landmarks model.
+
+Detect stress via facial tension (furrowed brows, clenched jaw).
+
+Detect distraction by monitoring gaze direction (head turned away from screen).
+
+Mic Monitoring (optional):
+
+Capture short bursts of audio → analyze for signs of stress (sighing, heavy breathing).
+
+Keep processing local only (no cloud sending).
+
+Focus Nudges:
+
+If drowsy → “😴 Looks like you need a 5-min break.”
+
+If distracted → “👀 Eyes back on the prize!”
+
+If focused → “✅ Great job, keep going!”
+
+Dashboard UI (web app):
+
+Show live webcam preview with overlays (eye/mouth detection boxes).
+
+A status panel: FOCUSED | DROWSY | DISTRACTED | STRESSED.
+
+A timeline graph of focus vs. distraction over the session.
+
+Privacy & Safety:
+
+All analysis runs locally in browser or backend, no data storage.
+
+Add a consent modal before enabling webcam/mic.
+
+Include a SAFETY.md explaining how privacy is preserved.
+
+Project Setup:
+
+Backend: FastAPI (Python) for ML inference.
+
+Frontend: React (or simple HTML/JS) for dashboard.
+
+ML: OpenCV, Dlib/MediaPipe for face landmarks, TensorFlow Lite or PyTorch for stress detection.
+
+Visualization: Chart.js or Recharts for timeline graph.
+
+Logging: Save only session stats (no raw video/audio).
+
+Deliverables:
+
+main.py → FastAPI backend (video/audio analysis endpoints).
+
+frontend/ → React or HTML dashboard with live video preview + results.
+
+models/ → Pretrained lightweight facial landmarks & stress detection models.
+
+static/ → CSS, JS.
+
+README.md → Project intro, setup guide, ethical disclaimer.
+
+SAFETY.md → Privacy guarantees (no data collection/storage).
+
+requirements.txt → Dependencies list.
+
+LICENSE (MIT recommended).
+
+Example session screenshots.
+
+README.md Outline:
+
+🎒 Project Overview
+
+✨ Features (drowsiness detection, distraction detection, stress cues, nudges)
+
+⚙️ Tech Stack (FastAPI + OpenCV + MediaPipe + React)
+
+🚀 Quickstart (install, run backend, run frontend)
+
+🔒 Privacy & Ethics (local-only processing, no recording)
+
+📊 Future Roadmap (mobile app, integration with study timers like Pomodoro)
