@@ -27,6 +27,13 @@ A React-based web application that helps students maintain focus during study se
 - Webcam-enabled device
 - Modern web browser with WebRTC support
 
+📸 Screenshots 
+
+![WhatsApp Image 2025-08-21 at 19 58 57_c85bfc48](https://github.com/user-attachments/assets/dd212f90-7654-4296-9554-768d2f7699bf)
+![WhatsApp Image 2025-08-21 at 19 58 44_10b8ff43](https://github.com/user-attachments/assets/dae4a814-200f-44a5-914f-28d95dc84270)
+<img width="940" height="336" alt="image" src="https://github.com/user-attachments/assets/c6963c98-406c-4949-827c-6e1f8ff38c25" />
+<img width="620" height="508" alt="image" src="https://github.com/user-attachments/assets/f1e3618a-7285-4e31-80fb-04e062b19cdf" />
+
 ### Installation
 
 1. **Clone and install dependencies**
