@@ -39,6 +39,7 @@ A React-based web application that helps students maintain focus during study se
 1. **Clone and install dependencies**
 ```bash
 npm install
+```
 
 
 
